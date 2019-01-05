@@ -11,10 +11,10 @@
 |
 */
 
-// 
-Route::get('/','StaticPagesController@home');
-Route::get('/help','StaticPagesController@help');
-Route::get('/about','StaticPagesController@about');
+//  -name('help') 是针对前端   route('help') 而 get('faq') 是针对url中 
+Route::get('/','StaticPagesController@home')->name('home');
+Route::get('/help','StaticPagesController@help')->name('help');
+Route::get('/about','StaticPagesController@about')->name('about');
 
 /*Route::get($uri, $callback); 
 Route::post($uri, $callback);
