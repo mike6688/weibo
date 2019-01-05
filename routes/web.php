@@ -18,6 +18,17 @@ Route::get('/about','StaticPagesController@about')->name('about');
 //注册路由
 Route::get('/signup','UsersController@create')->name('signup');
 
+//users 路由 
+Route::resource('users','UsersController');//這行代碼 等同 下面
+// 並且遵守  Resful架构对路由设计
+/*Route::get('/users','UsersController@index')->name('users.index');
+Route::get('/users/create','UsersController@create')->name('users.create');
+Route::get('/users/{user}','UsersController@show')->name('users.show');
+Route::post('/users','UsersController@store')->name('users.store');
+Route::get('/users/{user}/edit','UsersController@edit')->name('user.edit');
+Route::patch('/users/{user}','UsersController@update')->name('users.update');
+Route::delete('/users/{user}','UsersController@destroy')->name('users.destroy');*/
+
 /*Route::get($uri, $callback); 
 Route::post($uri, $callback);
 Route::put($uri, $callback);

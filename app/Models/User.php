@@ -29,4 +29,14 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    // 获取头像 的方法
+    public function gravatar($size = '100'){
+        // $hash = md5(strtolower(trim('$this->attributes['email']')));
+        $hash = md5(strtolower(trim('jianyang8665@gmail.com')));
+        return "http://www.gravatar.com/avatar/$hash?s=$size";
+        //attributes 作用是 设置请求参数错误时  各个字段的名称
+        ////$this->attributes['email'] 获取到用户的邮箱
+        
+    }
 }
