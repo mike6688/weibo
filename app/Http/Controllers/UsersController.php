@@ -18,4 +18,15 @@ class UsersController extends Controller
     	// compact是将变量转为 关联数组
     	return view('users.show',compact('user'));
     }
+
+    //  注册表单
+    public function store(Request $request){
+    	// validate() 方法两个参数 1、用户输入的2、规则
+    	$this->validate($request,[
+    		'name' => 'required|max:50',
+    		'email' => 'required|email|unique:users|max:255',
+    		'password' => 'required|confirmed|min:6'
+    	]);
+    	
+    }
 }
