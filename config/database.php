@@ -1,5 +1,7 @@
 <?php
 
+$db_config = get_db_config();
+
 return [
 
     /*
@@ -13,8 +15,9 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
-
+    // 'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => $db_config['connection'],
+    
     /*
     |--------------------------------------------------------------------------
     | Database Connections
@@ -65,7 +68,7 @@ return [
             'password' => env('DB_PASSWORD', ''),
             'charset' => 'utf8',
             'prefix' => '',
-            'prefix_indexes' => true,
+            // 'prefix_indexes' => true,
             'schema' => 'public',
             'sslmode' => 'prefer',
         ],
