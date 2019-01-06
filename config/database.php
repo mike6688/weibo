@@ -1,6 +1,7 @@
 <?php
 
 $db_config = get_db_config();
+print_r($db_config);exit();
 
 return [
 
@@ -9,8 +10,8 @@ return [
     | Default Database Connection Name
     |--------------------------------------------------------------------------
     |
-    | Here you may specify which of the database connections below you wish
-    | to use as your default connection for all database work. Of course
+    | Here you may specify which of the database connections below you wishconnection
+    | to use as your default  for all database work. Of course
     | you may use many connections at once using the Database library.
     |
     */
