@@ -10,12 +10,21 @@ class UsersController extends Controller
 {
     public function __construct(){
         $this->middleware('auth',[ //middleware中间件函数 参数1、键名2、哪些方法用/不用中间件
-            'except' => ['create','store']  // except指这些键 不需要 经过 2、only 与 except相反 仅仅需要  那些键 用中间件
+            'except' => ['create','store','index']  // except指这些键 不需要 经过 2、only 与 except相反 仅仅需要  那些键 用中间件
         ]);
         $this->middleware('guest',[
             'only' =>['create']
             ]);
     }
+
+    //列表
+    public function index(){
+        // paginate(10)
+        $users = User::paginate(10);
+        return view('users.index',compact('users'));
+    }
+
+
     //注册页面
     public function create(){
     	return view('users.create');
