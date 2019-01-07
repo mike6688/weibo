@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Auth;
+use Mail;
 
 class UsersController extends Controller
 {
     public function __construct(){
         $this->middleware('auth',[ //middleware中间件函数 参数1、键名2、哪些方法用/不用中间件
-            'except' => ['create','store','index']  // except指这些键 不需要 经过 2、only 与 except相反 仅仅需要  那些键 用中间件
+            'except' => ['create','store','index','confirmEmail']  // except指这些键 不需要 经过 2、only 与 except相反 仅仅需要  那些键 用中间件
         ]);
         $this->middleware('guest',[
             'only' =>['create']
@@ -68,14 +69,30 @@ class UsersController extends Controller
     	//我们想存一条缓存数据，且它只在下一次的请求内有效可以用 flash方法 两个参数 1、键2、值  
     	//之后用  session()->get('success')取出
     	// session()->has('success') 判断是否有 jian为 success的session
-        Auth::login($user);//login()自动登录函数 自动登录 
-    	session()->flash('success','欢迎，您将在这里开启新的旅程！');
+        //Auth::login($user);//login()自动登录函数 自动登录 
+    	//session()->flash('success','欢迎，您将在这里开启新的旅程！');
 
     	// 1、redirect('/')->back()   === back() 2、redirect()->with()
-    	return redirect()->route('users.show',[$user]);
+    	//return redirect()->route('users.show',[$user]);
     	//以上代码 等同于(约定优于配置的体现，$user 是 User模型对象的实例，route()会自动获取Model的主键，也就是 userss的主键id)
     	// return redirect()->route('users.show',[$user->id]);
-    	
+    	$this->sendEmailConfirmationTo($user);
+        session()->flash('success','验证邮件已发送到你的注册邮箱上，请注意查收。');
+        return redirect('/');
+    }
+
+    // 发送 邮件
+    protected function sendEmailConfirmationTo($user){
+        $view = 'emails.confirm';
+        $data = compact('user');
+        $from = '1240817502@qq.com';
+        $name = 'yang';
+        $to = $user->email;
+        $subject = "感谢注册新浪微博，请确定您的邮箱！";
+
+        Mail::send($view,$data,function($message) use ($from,$name,$to,$subject){
+            $message->from($from,$name)->to($to)->subject($subject);
+        });
     }
 
     //修改资料页面
@@ -103,5 +120,19 @@ class UsersController extends Controller
         session()->flash('success','个人资料更新成功！');
 
         return redirect()->route('users.show',$user->id);
+    }
+
+    //确认邮件
+    public function confirmEmail($token){
+        $user = User::where('activation_token',$token)->firstOrFail();
+
+        $user->activated = true;
+        $user->activation_token = null;
+        $user->save();
+
+        Auth::login($user);
+
+        session()->flash('success','恭喜你，激活成功！');
+        return redirect()->route('users.show',[$user]);
     }
 }

@@ -28,10 +28,16 @@ class SessionController extends Controller
     	]);
     	//attempt() 可接受两个参数 1、用户数组 2、是否开启记住我 布尔值 $request->has() 判断是否有值
     	if(Auth::attempt($credentials,$request->has('remember'))){
+            if(Auth::user()->activated){
     		session()->flash('success','欢迎回来！');
             $fallback = route('users.show', Auth::user());
     		return redirect()->intended($fallback); //intended() 方法定向为上一次尝试访问的方法
     		// Auth::user() 获取当前 登录用户信息，并将数据传递给路由
+            }else{
+                Auth::logout();
+                session()->flash('warning','你的账号未激活，请检查邮箱中的注册邮件进行激活');
+                return redirect('/');
+            } 
     	}else{
     		session()->flash('danger','抱歉，您的邮箱和密码不匹配');
     		return redirect()->back()->withInput();
