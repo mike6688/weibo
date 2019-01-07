@@ -24,6 +24,13 @@ class UsersController extends Controller
         return view('users.index',compact('users'));
     }
 
+    //管理员 删除用户
+    public function destroy(User $user){
+        $this->authorize('destroy',$user);
+        $user->delete();
+        session()->flash('success','成功删除用户！');
+        return back(); //重定向 上一次 进行删除操作的页面
+    }
 
     //注册页面
     public function create(){
