@@ -20,8 +20,8 @@ class SessionController extends Controller
     		'email' => 'required|email|max:255',
     		'password' => 'required'
     	]);
-
-    	if(Auth::attempt($credentials)){
+    	//attempt() 可接受两个参数 1、用户数组 2、是否开启记住我 布尔值 $request->has() 判断是否有值
+    	if(Auth::attempt($credentials,$request->has('remember'))){
     		session()->flash('success','欢迎回来！');
     		return redirect()->route('users.show',[Auth::user()]);
     		// Auth::user() 获取当前 登录用户信息，并将数据传递给路由
