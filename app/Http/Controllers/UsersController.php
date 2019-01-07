@@ -8,6 +8,14 @@ use Auth;
 
 class UsersController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth',[ //middleware中间件函数 参数1、键名2、哪些方法用/不用中间件
+            'except' => ['create','store']  // except指这些键 不需要 经过 2、only 与 except相反 仅仅需要  那些键 用中间件
+        ]);
+        $this->middleware('guest',[
+            'only' =>['create']
+            ]);
+    }
     //注册页面
     public function create(){
     	return view('users.create');
@@ -56,11 +64,13 @@ class UsersController extends Controller
 
     //修改资料页面
     public function edit(User $user){
+        $this->authorize('update',$user);
         return view('users.edit',compact('user'));
     }
 
     //update页面  User $user 利用 laravel 隐形 路由模型绑定  读取对应的id用户实例 $user
     public function update(User $user,Request $request){
+        $this->authorize('update',$user);
         $this->validate($request,[
             'name' => 'required|max:50',
             'password' => 'nullable|confirmed|min:6'

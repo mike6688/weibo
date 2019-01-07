@@ -7,6 +7,12 @@ use Auth;
 
 class SessionController extends Controller
 {
+
+    public function __construct(){
+        $this->middleware('guest',[// auth中间件 提供 的guest选项 用于 一些只允许未登录用户访问的动作
+            'only'=>['create']
+        ]);
+    }
     //登录页面
     
     public function create(){
@@ -23,7 +29,8 @@ class SessionController extends Controller
     	//attempt() 可接受两个参数 1、用户数组 2、是否开启记住我 布尔值 $request->has() 判断是否有值
     	if(Auth::attempt($credentials,$request->has('remember'))){
     		session()->flash('success','欢迎回来！');
-    		return redirect()->route('users.show',[Auth::user()]);
+            $fallback = route('users.show', Auth::user());
+    		return redirect()->intended($fallback); //intended() 方法定向为上一次尝试访问的方法
     		// Auth::user() 获取当前 登录用户信息，并将数据传递给路由
     	}else{
     		session()->flash('danger','抱歉，您的邮箱和密码不匹配');
