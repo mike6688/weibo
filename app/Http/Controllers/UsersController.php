@@ -43,6 +43,7 @@ class UsersController extends Controller
     	//我们想存一条缓存数据，且它只在下一次的请求内有效可以用 flash方法 两个参数 1、键2、值  
     	//之后用  session()->get('success')取出
     	// session()->has('success') 判断是否有 jian为 success的session
+        Auth::login($user);//login()自动登录函数 自动登录 
     	session()->flash('success','欢迎，您将在这里开启新的旅程！');
 
     	// 1、redirect('/')->back()   === back() 2、redirect()->with()
