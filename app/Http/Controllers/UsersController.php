@@ -53,4 +53,29 @@ class UsersController extends Controller
     	// return redirect()->route('users.show',[$user->id]);
     	
     }
+
+    //修改资料页面
+    public function edit(User $user){
+        return view('users.edit',compact('user'));
+    }
+
+    //update页面  User $user 利用 laravel 隐形 路由模型绑定  读取对应的id用户实例 $user
+    public function update(User $user,Request $request){
+        $this->validate($request,[
+            'name' => 'required|max:50',
+            'password' => 'nullable|confirmed|min:6'
+        ]);
+
+        $data = [];
+        $data['name'] = $request->name;
+        if($request->password){
+            $data['password'] = bcrypt($request->password);
+        }
+
+        $user->update($data);
+
+        session()->flash('success','个人资料更新成功！');
+
+        return redirect()->route('users.show',$user->id);
+    }
 }

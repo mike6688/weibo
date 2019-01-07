@@ -38,3 +38,7 @@ Route::options($uri, $callback);*/
 Route::get('login','SessionController@create')->name('login');
 Route::post('login','SessionController@store')->name('login');
 Route::delete('logout','SessionController@destroy')->name('logout');
+
+//用户修改资料页面
+Route::get('/users/{user}/edit','UsersController@edit')->name('users.edit');
+Route::patch('/users/{user}/update','UsersController@update')->name('users.update');
