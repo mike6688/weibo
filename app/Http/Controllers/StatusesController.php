@@ -23,4 +23,11 @@ class StatusesController extends Controller
     	session()->flash('success','发布成功！');
     	return redirect()->back();
     }
+
+    public function destroy(Status $status){ // 括号内是  隐形路由模型绑定  laravel会自动查找并注入 对应 id的实例对象  $status
+        $this->authorize('destroy',$status); //策略授权检测
+        $status->delete();
+        session()->flash('success','微博已经成功删除！');
+        return redirect()->back();
+    }
 }
