@@ -91,7 +91,7 @@ class UsersController extends Controller
         $subject = "感谢注册新浪微博，请确定您的邮箱！";
 
         Mail::send($view,$data,function($message) use ($from,$name,$to,$subject){
-            $message->from($from,$name)->to($to)->subject($subject);
+            $message->to($to)->subject($subject);
         });
     }
 
