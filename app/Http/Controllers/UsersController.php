@@ -42,7 +42,10 @@ class UsersController extends Controller
     public function show(User $user){ //$user 必须和 路由中{$user}意思必须有参数
     	// 将 用户对象 $user 通过 compact 方法 转化为一个关联数组
     	// compact是将变量转为 关联数组
-    	return view('users.show',compact('user'));
+        $statuses = $user->statuses()
+                            ->orderBy('created_at','desc')
+                            ->paginate(10); 
+    	return view('users.show',compact('user','statuses'));
     }
 
     //  注册表单
