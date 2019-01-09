@@ -46,4 +46,9 @@ class User extends Authenticatable
         ////$this->attributes['email'] 获取到用户的邮箱
         
     }
+
+    public function statuses(){
+        // 模型关联一对多 
+        return $this->hasMany(Status::class);
+    }
 }
